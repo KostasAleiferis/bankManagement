@@ -58,6 +58,8 @@ You can explore and try out the REST APIs using Swagger. Access the Swagger UI a
 - Swagger UI: http://localhost:8080/swagger-ui.html
 This interface provides a comprehensive overview of the available endpoints, along with their descriptions, request parameters, and response formats.
 
+## Log Files
+The application logs can be found in the logs folder. These logs capture important runtime information, which can be useful for debugging and monitoring the application's behavior.
 
 ## Technologies Used
 - Java 17
