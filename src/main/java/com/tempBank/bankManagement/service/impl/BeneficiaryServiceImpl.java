@@ -1,5 +1,6 @@
 package com.tempBank.bankManagement.service.impl;
 
+import com.tempBank.bankManagement.Exception.ResourceNotFoundException;
 import com.tempBank.bankManagement.dao.BeneficiaryDao;
 import com.tempBank.bankManagement.model.Beneficiary;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -54,13 +54,10 @@ public class BeneficiaryServiceImpl {
         }
     }
 
-    public boolean existsById(Long beneficiaryId) {
-        return beneficiaryDao.existsById(beneficiaryId);
-    }
 
-
-    public Optional<Beneficiary> getById(Long id) {
-        return beneficiaryDao.findById(id);
+    public Beneficiary getById(Long id) {
+        return beneficiaryDao.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Beneficiary not found with ID: " + id));
     }
 
 }

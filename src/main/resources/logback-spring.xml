@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property scope="context" name="InfoLogFile" value="${LOG_DIR}/${NODE}.log" />
+    <property scope="context" name="InfoLogFileNamePattern" value="${LOG_DIR}/%d/${NODE}.log" />
+    <property scope="context" name="DebugLogFile" value="${LOG_DIR}/${NODE}.debug.log" />
+    <property scope="context" name="DebugFileNamePattern" value="${LOG_DIR}/%d/${NODE}.debug.log" />
+    <property scope="context" name="LogLevel" value="${LOG_LEVEL}" />
+    <property scope="context" name="LogAppender" value="${LOG_APPENDER}" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyMMdd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ROLLING_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <file>${InfoLogFile}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${InfoLogFileNamePattern}</fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <Pattern>%d{MMdd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </encoder>
+
+    </appender>
+
+    <!-- Uncomment if you want to enable class-specific debugging -->
+    <appender name="debuggingAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <file>${DebugLogFile}</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${DebugFileNamePattern}</fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %class{36}-%M %L %-5level %logger{0} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--logger name="org.hibernate.SQL" level="debug" additivity="false">
+        <appender-ref ref="debuggingAppender"/>
+    </logger-->
+
+
+    <logger name="com.idocs.base.utils.script.SqlTool" level="ERROR">
+        <appender-ref ref="ROLLING_APPENDER"/>
+    </logger>
+
+    <logger name="com.zaxxer.hikari.pool.HikariPool" level="OFF"/>
+    <logger name="com.zaxxer.hikari.pool.ProxyConnection" level="OFF"/>
+    <logger name="org.quartz.core.QuartzScheduler" level="OFF"/>
+
+
+    <root level="${LogLevel}">
+        <appender-ref ref="${LogAppender}" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+
+</configuration>
